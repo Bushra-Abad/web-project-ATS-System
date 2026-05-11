@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-color: #f5f5f5;
+  --text-color: #333;
+  --text-muted: #666;
+  --card-bg: #ffffff;
+  --nav-bg: #1a1a2e;
+  --nav-text: #ffffff;
+  --primary: #1a1a2e;
+  --primary-hover: #16213e;
+  --secondary: #e94560;
+  --accent: #2196F3;
+  --input-bg: #ffffff;
+  --input-border: #ddd;
+  --shadow: 0 4px 15px rgba(0,0,0,0.05);
+  --border-color: #eeeeee;
+}
+
+body.dark-mode {
+  --bg-color: #0f0f1a;
+  --text-color: #f5f5f5;
+  --text-muted: #aaa;
+  --card-bg: #1a1a2e;
+  --nav-bg: #16213e;
+  --nav-text: #ffffff;
+  --primary: #4ecca3;
+  --primary-hover: #45b291;
+  --secondary: #e94560;
+  --accent: #64ffda;
+  --input-bg: #1e1e2d;
+  --input-border: #444;
+  --shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --border-color: #333344;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Global Dark Mode Overrides for components with inline styles */
+body.dark-mode *[style*="background: #fff"], 
+body.dark-mode *[style*="background-color: #fff"],
+body.dark-mode *[style*="background: white"],
+body.dark-mode *[style*="background-color: white"],
+body.dark-mode *[style*="background: rgb(255, 255, 255)"],
+body.dark-mode *[style*="background-color: rgb(255, 255, 255)"],
+body.dark-mode *[style*="background: #f5f5f5"],
+body.dark-mode *[style*="background-color: #f5f5f5"],
+body.dark-mode *[style*="background: rgb(245, 245, 245)"],
+body.dark-mode *[style*="background-color: rgb(245, 245, 245)"],
+body.dark-mode *[style*="background: #f8f9fa"],
+body.dark-mode *[style*="background-color: #f8f9fa"],
+body.dark-mode *[style*="background: rgb(248, 249, 250)"],
+body.dark-mode *[style*="background-color: rgb(248, 249, 250)"],
+body.dark-mode *[style*="background: #fafafa"],
+body.dark-mode *[style*="background-color: #fafafa"],
+body.dark-mode *[style*="background: rgb(250, 250, 250)"],
+body.dark-mode *[style*="background-color: rgb(250, 250, 250)"],
+body.dark-mode *[style*="background: #eee"],
+body.dark-mode *[style*="background-color: #eee"],
+body.dark-mode *[style*="background: rgb(238, 238, 238)"],
+body.dark-mode *[style*="background-color: rgb(238, 238, 238)"],
+body.dark-mode *[style*="background: #f0f0f0"],
+body.dark-mode *[style*="background-color: #f0f0f0"],
+body.dark-mode *[style*="background: rgb(240, 240, 240)"],
+body.dark-mode *[style*="background-color: rgb(240, 240, 240)"],
+body.dark-mode *[style*="background: #f9f9f9"],
+body.dark-mode *[style*="background-color: #f9f9f9"],
+body.dark-mode *[style*="background: rgb(249, 249, 249)"],
+body.dark-mode *[style*="background-color: rgb(249, 249, 249)"],
+body.dark-mode .card,
+body.dark-mode .job-card,
+body.dark-mode .filter-section,
+body.dark-mode .recentSection,
+body.dark-mode .linksSection,
+body.dark-mode .statCard,
+body.dark-mode .panel,
+body.dark-mode .modalContent,
+body.dark-mode .uploadGroup,
+body.dark-mode .headerBanner,
+body.dark-mode .tableContainer {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  box-shadow: var(--shadow) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode strong,
+body.dark-mode b,
+body.dark-mode h1 *,
+body.dark-mode h2 *,
+body.dark-mode h3 *,
+body.dark-mode h4 *,
+body.dark-mode h4[style*="color: #333"],
+body.dark-mode h3[style*="color: #1a1a2e"],
+body.dark-mode h1[style*="color: #1a1a2e"],
+body.dark-mode h2[style*="color: #1a1a2e"],
+body.dark-mode h1[style*="color: #333"],
+body.dark-mode h2[style*="color: #333"],
+body.dark-mode h3[style*="color: #333"] {
+  color: var(--text-color) !important;
+}
+
+body.dark-mode p, 
+body.dark-mode span, 
+body.dark-mode label,
+body.dark-mode li,
+body.dark-mode small,
+body.dark-mode div,
+body.dark-mode p[style*="color: #666"],
+body.dark-mode span[style*="color: #666"],
+body.dark-mode small[style*="color: #666"],
+body.dark-mode p[style*="color: #444"],
+body.dark-mode li[style*="color: #444"],
+body.dark-mode div[style*="color: #666"],
+body.dark-mode div[style*="color: #444"] {
+  color: var(--text-muted) !important;
+}
+
+/* Ensure headings inside cards are visible */
+body.dark-mode .card h1, body.dark-mode .card h2, body.dark-mode .card h3, body.dark-mode .card h4,
+body.dark-mode .job-card h1, body.dark-mode .job-card h2, body.dark-mode .job-card h3, body.dark-mode .job-card h4 {
+    color: var(--text-color) !important;
+}
+
+body.dark-mode input, 
+body.dark-mode select, 
+body.dark-mode textarea {
+  background-color: var(--input-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--input-border) !important;
+}
+
+body.dark-mode .navbar {
+  background-color: var(--nav-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+body.dark-mode a {
+  color: var(--accent) !important;
+}
+
+body.dark-mode button[style*="background: #1a1a2e"],
+body.dark-mode button[style*="background-color: #1a1a2e"],
+body.dark-mode button[style*="background: #fff"],
+body.dark-mode button[style*="background-color: #fff"] {
+    background-color: var(--primary) !important;
+    color: #000 !important;
+}
+
+body.dark-mode .quickLink,
+body.dark-mode a[style*="background: #f8f9fa"],
+body.dark-mode a[style*="background-color: #f8f9fa"],
+body.dark-mode a[style*="background: #e3f2fd"],
+body.dark-mode a[style*="background-color: #e3f2fd"] {
+    background-color: #16213e !important;
+    color: var(--text-color) !important;
+    border-color: #2d2d4e !important;
+}
+
+body.dark-mode tr, body.dark-mode th, body.dark-mode td {
+    border-color: var(--border-color) !important;
+    background-color: transparent !important;
+    color: var(--text-color) !important;
+}
+
+body.dark-mode thead tr {
+    background-color: #16213e !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
