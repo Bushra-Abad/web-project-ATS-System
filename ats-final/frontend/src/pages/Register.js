@@ -32,7 +32,7 @@ const ROLE_OPTIONS = [
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '', email: '', password: '', phone: '', role: 'candidate', adminCode: ''
+    name: '', email: '', password: '', confirmPassword: '', phone: '', role: 'candidate', adminCode: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,18 +56,62 @@ const Register = () => {
     setError('');
   };
 
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!formData.name || !formData.email || !formData.password || !formData.phone) {
-      setError('Please fill in all required fields.');
-      return;
+    // 1. Basic Required Fields Check
+    if (!formData.name.trim()) {
+        setError('Please enter your full name.');
+        return;
+    }
+    if (formData.name.trim().length < 3) {
+        setError('Name must be at least 3 characters long.');
+        return;
+    }
+
+    if (!formData.email.trim()) {
+        setError('Please enter your email address.');
+        return;
+    }
+    if (!validateEmail(formData.email.trim())) {
+        setError('Please enter a valid email address.');
+        return;
+    }
+
+    if (!formData.phone.trim()) {
+        setError('Please enter your phone number.');
+        return;
+    }
+    // Simple digits-only check for phone (allowing for some common characters like - or spaces if needed, but here we enforce digits)
+    const phoneDigits = formData.phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+        setError('Please enter a valid phone number (10-15 digits).');
+        return;
+    }
+
+    if (!formData.password) {
+        setError('Please enter a password.');
+        return;
     }
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters.');
       return;
     }
+
+    if (formData.password !== formData.confirmPassword) {
+        setError('Passwords do not match.');
+        return;
+    }
+
     if (formData.role === 'admin') {
       if (!formData.adminCode) {
         setError('Admin registration requires the secret admin code.');
@@ -81,10 +125,10 @@ const Register = () => {
 
     setLoading(true);
     const payload = {
-      name: formData.name,
+      name: formData.name.trim(),
       email: formData.email.trim().toLowerCase(),
       password: formData.password,
-      phone: formData.phone,
+      phone: formData.phone.trim(),
       role: formData.role,
       adminCode: formData.adminCode,
     };
@@ -207,7 +251,7 @@ const Register = () => {
             <input
               type="text" name="name" value={formData.name}
               onChange={handleChange} style={s.input}
-              placeholder="e.g. xyz" required
+              placeholder="e.g. John Doe" required
             />
           </div>
 
@@ -216,7 +260,7 @@ const Register = () => {
             <input
               type="email" name="email" value={formData.email}
               onChange={handleChange} style={s.input}
-              placeholder="xyz@example.com" required
+              placeholder="john@example.com" required
             />
           </div>
 
@@ -230,13 +274,22 @@ const Register = () => {
               />
             </div>
             <div style={{ ...s.inputGroup, flex: 1 }}>
-              <label style={s.label}>Phone Number *</label>
+              <label style={s.label}>Confirm Password *</label>
               <input
-                type="text" name="phone" value={formData.phone}
+                type="password" name="confirmPassword" value={formData.confirmPassword}
                 onChange={handleChange} style={s.input}
-                placeholder="0300-1234567" required
+                placeholder="Repeat password" required
               />
             </div>
+          </div>
+
+          <div style={s.inputGroup}>
+            <label style={s.label}>Phone Number *</label>
+            <input
+              type="text" name="phone" value={formData.phone}
+              onChange={handleChange} style={s.input}
+              placeholder="e.g. 03001234567" required
+            />
           </div>
 
           {/* Admin Code — only shown when admin is selected */}

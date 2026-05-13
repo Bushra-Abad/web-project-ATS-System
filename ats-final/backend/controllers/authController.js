@@ -16,8 +16,30 @@ const register = async (req, res) => {
     let { name, email, password, role, phone, adminCode } = req.body;
 
     // Validate required fields
-    if (!email || !password || !name) {
-      return res.status(400).json({ message: 'Email, password, and name are required' });
+    if (!email || !password || !name || !phone) {
+      return res.status(400).json({ message: 'All fields (name, email, password, phone) are required' });
+    }
+
+    // Email validation
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(String(email).toLowerCase().trim())) {
+      return res.status(400).json({ message: 'Please provide a valid email address' });
+    }
+
+    // Name validation
+    if (name.trim().length < 3) {
+      return res.status(400).json({ message: 'Name must be at least 3 characters long' });
+    }
+
+    // Password validation
+    if (password.length < 6) {
+      return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+    }
+
+    // Phone validation
+    const phoneDigits = phone.replace(/\D/g, '');
+    if (phoneDigits.length < 10 || phoneDigits.length > 15) {
+      return res.status(400).json({ message: 'Please provide a valid phone number (10-15 digits)' });
     }
 
     email = String(email).toLowerCase().trim();

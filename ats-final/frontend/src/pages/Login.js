@@ -16,12 +16,25 @@ const Login = () => {
 
   const dm = darkMode;
 
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password) {
+    if (!email.trim() || !password) {
       setError('Please fill in all required fields.');
+      return;
+    }
+
+    if (!validateEmail(email.trim())) {
+      setError('Please enter a valid email address.');
       return;
     }
 
@@ -45,7 +58,7 @@ const Login = () => {
         navigate('/hr/dashboard');
       }
     } else {
-      setError(res.message);
+      setError(res.message || 'Login failed. Please check your credentials.');
     }
   };
 
