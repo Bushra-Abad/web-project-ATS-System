@@ -17,9 +17,18 @@ const uploadRoutes = require('./routes/uploadRoutes');
 // Initialize App
 const app = express();
 const server = http.createServer(app);
+
+// Define allowed origins for both Express and Socket.io
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.endsWith('/') ? process.env.FRONTEND_URL.slice(0, -1) : `${process.env.FRONTEND_URL}/`
+].filter(Boolean);
+
 const io = socketIo(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001', process.env.FRONTEND_URL],
+    origin: allowedOrigins,
     credentials: true
   }
 });
@@ -55,7 +64,15 @@ connectDB();
 
 // Middlewares
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', process.env.FRONTEND_URL],
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
   credentials: true
 }));
 app.use(express.json());
