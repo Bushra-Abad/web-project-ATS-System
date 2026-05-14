@@ -60,6 +60,16 @@ const register = async (req, res) => {
       }
     }
 
+    // Secure HR Registration
+    if (role === 'hr') {
+      const systemHrCode = process.env.HR_REGISTRATION_CODE || 'ATS@HR2026';
+      if (!adminCode || adminCode !== systemHrCode) {
+        return res.status(401).json({ 
+          message: 'Unauthorized: Invalid HR registration code' 
+        });
+      }
+    }
+
     // Password hashing is handled automatically by the pre-save hook in User model
     const user = await User.create({
       name,

@@ -42,9 +42,10 @@ const Register = () => {
 
   const dm = darkMode;
 
-  // The admin secret is checked on the frontend to show/hide the field,
+  // The secrets are checked on the frontend to show/hide the field,
   // and validated on the backend for security.
   const ADMIN_SECRET = 'ATS@Admin2026';
+  const HR_SECRET = 'ATS@HR2026';
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -123,6 +124,17 @@ const Register = () => {
       }
     }
 
+    if (formData.role === 'hr') {
+      if (!formData.adminCode) {
+        setError('HR registration requires the secret HR code.');
+        return;
+      }
+      if (formData.adminCode !== HR_SECRET) {
+        setError('❌ Invalid HR code. Contact your manager.');
+        return;
+      }
+    }
+
     setLoading(true);
     const payload = {
       name: formData.name.trim(),
@@ -196,11 +208,19 @@ const Register = () => {
       borderRadius: '50%', width: '18px', height: '18px', fontSize: '0.7rem',
       display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900'
     },
-    adminBox: {
-      background: dm ? '#2d2d4e' : '#f3e5f5', border: `1.5px solid ${dm ? '#9C27B0' : '#ce93d8'}`, borderRadius: '10px',
+    adminBox: (role) => ({
+      background: role === 'admin' 
+        ? (dm ? '#2d2d4e' : '#f3e5f5')
+        : (dm ? '#1b3a27' : '#e8f5e9'), 
+      border: `1.5px solid ${role === 'admin' ? (dm ? '#9C27B0' : '#ce93d8') : (dm ? '#4CAF50' : '#a5d6a7')}`, 
+      borderRadius: '10px',
       padding: '1.2rem', display: 'flex', flexDirection: 'column', gap: '0.8rem'
-    },
-    adminNote: { margin: 0, fontSize: '0.88rem', color: dm ? '#ce93d8' : '#6a1b9a', lineHeight: '1.5' },
+    }),
+    adminNote: (role) => ({ 
+      margin: 0, fontSize: '0.88rem', 
+      color: role === 'admin' ? (dm ? '#ce93d8' : '#6a1b9a') : (dm ? '#a5d6a7' : '#2e7d32'), 
+      lineHeight: '1.5' 
+    }),
     button: {
       color: dm ? '#000' : '#fff', border: 'none', padding: '15px', borderRadius: '8px',
       cursor: 'pointer', fontSize: '1.05rem', fontWeight: '800', marginTop: '6px',
@@ -292,19 +312,25 @@ const Register = () => {
             />
           </div>
 
-          {/* Admin Code — only shown when admin is selected */}
-          {formData.role === 'admin' && (
-            <div style={s.adminBox}>
-              <p style={s.adminNote}>
-                🛡️ <strong>Admin Registration</strong> — Enter the secret admin code provided by your system administrator.
+          {/* Secret Code Box — for admin or hr */}
+          {(formData.role === 'admin' || formData.role === 'hr') && (
+            <div style={s.adminBox(formData.role)}>
+              <p style={s.adminNote(formData.role)}>
+                {formData.role === 'admin' ? (
+                  <>🛡️ <strong>Admin Registration</strong> — Enter the secret admin code provided by your system administrator.</>
+                ) : (
+                  <>🧑‍💼 <strong>HR Registration</strong> — Enter the secret HR code provided by your organization.</>
+                )}
               </p>
               <div style={s.inputGroup}>
-                <label style={s.label}>Admin Secret Code *</label>
+                <label style={s.label}>
+                  {formData.role === 'admin' ? 'Admin Secret Code *' : 'HR Secret Code *'}
+                </label>
                 <input
                   type="password" name="adminCode" value={formData.adminCode}
                   onChange={handleChange}
-                  style={{ ...s.input, borderColor: dm ? '#fff' : '#9C27B0' }}
-                  placeholder="Enter admin secret code"
+                  style={{ ...s.input, borderColor: formData.role === 'admin' ? (dm ? '#fff' : '#9C27B0') : (dm ? '#fff' : '#4CAF50') }}
+                  placeholder={`Enter ${formData.role === 'admin' ? 'admin' : 'HR'} secret code`}
                 />
               </div>
             </div>
