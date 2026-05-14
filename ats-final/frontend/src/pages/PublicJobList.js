@@ -27,12 +27,12 @@ const PublicJobList = () => {
     fetchJobs();
   }, []);
 
-  const filteredJobs = jobs.filter(job => {
-    const matchSearch = job.title.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredJobs = Array.isArray(jobs) ? jobs.filter(job => {
+    const matchSearch = job.title?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchBranch = branchFilter ? job.branch?.name === branchFilter : true;
     const matchDepartment = departmentFilter ? job.department === departmentFilter : true;
     return matchSearch && matchBranch && matchDepartment && job.status === 'active';
-  });
+  }) : [];
 
   const s = {
     container: { padding: '0 2rem 2rem 2rem', maxWidth: '1200px', margin: '0 auto' },

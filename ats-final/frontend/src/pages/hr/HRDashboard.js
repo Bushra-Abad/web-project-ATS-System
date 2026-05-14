@@ -54,18 +54,22 @@ const HRDashboard = () => {
         const apps = appRes.data;
         const ints = intRes.data;
 
+        const isJobsArray = Array.isArray(jobs);
+        const isAppsArray = Array.isArray(apps);
+        const isIntsArray = Array.isArray(ints);
+
         setStats({
-          jobs: jobs.length,
-          applications: apps.length,
-          shortlisted: apps.filter(a => a.status === 'Shortlisted').length,
-          interviews: ints.length,
-          selected: apps.filter(a => a.status === 'Selected').length,
-          rejected: apps.filter(a => a.status === 'Rejected').length,
+          jobs: isJobsArray ? jobs.length : 0,
+          applications: isAppsArray ? apps.length : 0,
+          shortlisted: isAppsArray ? apps.filter(a => a?.status === 'Shortlisted').length : 0,
+          interviews: isIntsArray ? ints.length : 0,
+          selected: isAppsArray ? apps.filter(a => a?.status === 'Selected').length : 0,
+          rejected: isAppsArray ? apps.filter(a => a?.status === 'Rejected').length : 0,
         });
 
-        setChartData(buildChartData(apps));
+        setChartData(isAppsArray ? buildChartData(apps) : []);
 
-        const sortedApps = [...apps].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        const sortedApps = isAppsArray ? [...apps].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) : [];
         setRecentApplications(sortedApps.slice(0, 5));
       } catch (error) {
         console.error('Error fetching dashboard data', error);
